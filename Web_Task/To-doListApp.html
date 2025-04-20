@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pallavi's To-Do List with Edit</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .todo-container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #4e54c8;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 75%;
+      padding: 10px;
+      border: 2px solid #4e54c8;
+      border-radius: 8px;
+      outline: none;
+      margin-right: 5px;
+    }
+
+    button.add-btn {
+      padding: 10px 15px;
+      background-color: #4e54c8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button.add-btn:hover {
+      background-color: #3b3f99;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background: #f0f4ff;
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    li:hover {
+      transform: scale(1.02);
+    }
+
+    .btn {
+      background: #4e54c8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    .delete-btn {
+      background-color: #ff4b5c;
+    }
+
+    .edit-btn {
+      background-color: #ffa500;
+    }
+
+    .save-btn {
+      background-color: #28a745;
+    }
+
+    .task-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .edit-input {
+      flex: 1;
+      padding: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="todo-container">
+    <h2>📝 Pallavi's To-Do List</h2>
+    <input type="text" id="taskInput" placeholder="Enter a new task" />
+    <button class="add-btn" onclick="addTask()">Add</button>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      if (taskText === "") {
+        alert("Please enter a task!");
+        return;
+      }
+
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.className = "task-text";
+      span.textContent = taskText;
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.className = "btn edit-btn";
+      editBtn.onclick = () => editTask(li, span);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Delete";
+      deleteBtn.className = "btn delete-btn";
+      deleteBtn.onclick = () => taskList.removeChild(li);
+
+      li.appendChild(span);
+      li.appendChild(editBtn);
+      li.appendChild(deleteBtn);
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+    }
+
+    function editTask(li, span) {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = span.textContent;
+      input.className = "edit-input";
+
+      const saveBtn = document.createElement("button");
+      saveBtn.textContent = "Save";
+      saveBtn.className = "btn save-btn";
+      saveBtn.onclick = () => {
+        span.textContent = input.value.trim() || span.textContent;
+        li.replaceChild(span, input);
+        li.replaceChild(editBtn, saveBtn);
+      };
+
+      const editBtn = li.querySelector(".edit-btn");
+
+      li.replaceChild(input, span);
+      li.replaceChild(saveBtn, editBtn);
+
+      input.focus();
+    }
+
+    taskInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        addTask();
+      }
+    });
+  </script>
+
+</body>
+</html>
